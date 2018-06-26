@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/AzureBlobStorage/App_Data
+/AzureBlobStorage/bin
+/AzureBlobStorage/obj/Debug
+/packages
+/.vs/AzureBlobStorage/v15/Server/sqlite3

@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Azure Blob Storage";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Azure Blob Storage</h2>
+        <p>
+            Attach an image to the form and click the button. The image will be uploaded to Azure Blob Storage in the cloud.
+        </p>
+        <div class="row">
+            <div class="listHost">
+                
+            </div>
+
+            <form role="form" action="../api/PostBlob" method="post" id="submitForm" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="form-group">
+                        <span class="control-fileupload">
+                            <label for="theFile" class="text-left">File to Upload.</label>
+                            <input type="file" id="theFile" name="theFile">
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <button type="submit" class="btn btn-lg btn-success btn-block" id="">Upload Image ! </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        GetAzureImages(); 
+
+        // submit image button
+        $("#submitForm").on("submit",function (e)
+        {
+            e.preventDefault();
+            var formData = new FormData($(this)[0]);
+            $.ajax({
+
+                url: '../api/PostBlob',
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                processData: false,
+                success: function (data, textStatus, xhr) {
+                    GetAzureImages(); 
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // todo 
+                }
+            });
+        });
+    });
+
+
+    function GetAzureImages() {
+        // get blob images from web api
+        $.ajax({
+        
+            url: '../api/GetBlobs',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data, textStatus, xhr) {
+                            $('.contentSlider').remove(); // clear all items
+
+                            var $cs = $('<div class="contentSlider">  </div>');
+                            $('.listHost').append($cs);
+
+                            $.each(data, function (i, img) {
+                                var $el = $("<div class='sliderItem'> <div class='info' /> </div>");
+                                $el.append("<img src='" + img.uri + "' />");
+                                var $listInfo = $el.find(".info");
+                                $listInfo.append("<h2>" + img.name + "</h2>");
+                                $cs.prepend($el);
+                            });
+
+                            // init the slider using JQuery
+                            $cs.slick({
+                                infinite: false,
+                                dots: true,
+                                slidesToShow: 4,
+                                slidesToScroll: 1,
+                                focusOnSelect: true
+                            });
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // todo 
+                        }
+          });
+    }
+
+</script>
