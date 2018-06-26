@@ -21,7 +21,7 @@ namespace AzureBlobStorage.Controllers
         void initStorage()
         {
             string accessKey = "[Azure Blob Key Here]";
-            string store = "[StorgeName]";
+            string store = "[StorageName]";
             string containerName = "[ContainerName]";
             StorageCredentials sc = new StorageCredentials(store, accessKey);
             CloudStorageAccount storageAccount = new CloudStorageAccount(sc, true);
